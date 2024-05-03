@@ -17,6 +17,7 @@ public class UserService {
 
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
+    private ValidationCodeService validationCodeService;
     public void login(User user) {
 
         if (!user.getEmail().contains("@")) {
@@ -37,6 +38,7 @@ public class UserService {
         userRole.setRoleName(UserRoleType.CUSTOMER);
         user.setUserRole(userRole);
 
-        this.userRepository.save(user);
+        user =  this.userRepository.save(user);
+        this.validationCodeService.saveValidationCode(user);
     }
 }
