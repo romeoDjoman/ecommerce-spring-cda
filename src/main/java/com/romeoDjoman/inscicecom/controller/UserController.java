@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @Slf4j
 @AllArgsConstructor
 @RestController
@@ -23,6 +25,11 @@ public class UserController {
     public void login(@RequestBody User user){
         log.info("Login");
         this.userService.login(user);
+    }
+
+    @PostMapping(path = "activationCode")
+    public void activationCode(@RequestBody Map<String, String> activationCode){
+        this.userService.activationCode(activationCode);
     }
 
 }

@@ -16,6 +16,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 public class ValidationCodeService {
 
     private ValidationCodeRepository validationCodeRepository;
+    private NotificationService notificationService;
 
     public void saveValidationCode(User user) {
         ValidationCode validationCode = new ValidationCode();
@@ -23,16 +24,21 @@ public class ValidationCodeService {
 
         Instant creationDate = Instant.now();
         validationCode.setCreationDate(creationDate);
-        Instant expirationDate = creationDate.plus(10, MINUTES).now();
+        Instant expirationDate = creationDate.plus(10, MINUTES);
         validationCode.setExpirationDate(expirationDate);
 
-        // Create the code
+        // Create the coDde
         Random random = new Random();
         int randomInteger = random.nextInt(999999);
         String code = String.format("%06d", randomInteger);
 
         validationCode.setCode(code);
         this.validationCodeRepository.save(validationCode);
+        this.notificationService.sendNotification(validationCode);
+    }
+
+    public ValidationCode readAccordingCode(String code) {
+        return this.validationCodeRepository.findByCode(code).orElseThrow(() -> new RuntimeException("Votre code est invalide"));
     }
 
 }

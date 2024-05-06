@@ -3,11 +3,14 @@ package com.romeoDjoman.inscicecom.service;
 import com.romeoDjoman.inscicecom.ennum.UserRoleType;
 import com.romeoDjoman.inscicecom.entity.User;
 import com.romeoDjoman.inscicecom.entity.UserRole;
+import com.romeoDjoman.inscicecom.entity.ValidationCode;
 import com.romeoDjoman.inscicecom.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -40,5 +43,15 @@ public class UserService {
 
         user =  this.userRepository.save(user);
         this.validationCodeService.saveValidationCode(user);
+    }
+
+    public void activationCode(Map<String, String> activationCode) {
+        ValidationCode validationCode = this.validationCodeService.readAccordingCode(activationCode.get("code"));
+        if (Instant.now().isAfter(validationCode.getExpirationDate())) {
+            throw new RuntimeException(("Votre code a expiré"));
+        }
+        User userActivate = this.userRepository.findById(validationCode.getUser().getUserId()).orElseThrow(() -> new RuntimeException("utilisateur inconnu"));
+        userActivate.setActif(true);
+        this.userRepository.save(userActivate);
     }
 }
