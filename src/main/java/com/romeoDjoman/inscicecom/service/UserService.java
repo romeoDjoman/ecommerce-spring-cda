@@ -21,7 +21,7 @@ public class UserService {
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
     private ValidationCodeService validationCodeService;
-    public void login(User user) {
+    public void register(User user) {
 
         if (!user.getEmail().contains("@")) {
             throw new RuntimeException("Votre adresse email doit contenir un '@'.");

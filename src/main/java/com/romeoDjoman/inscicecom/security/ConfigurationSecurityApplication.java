@@ -22,7 +22,7 @@ public class ConfigurationSecurityApplication {
                         .authorizeHttpRequests(
                                 authorize ->
                                         authorize
-                                                .requestMatchers(POST, "/login").permitAll()
+                                                .requestMatchers(POST, "/register").permitAll()
                                                 .requestMatchers(POST, "/activationCode").permitAll()
                                                 .anyRequest().authenticated()
                         ).build();

@@ -21,10 +21,10 @@ public class UserController {
 
     private UserService userService;
 
-    @PostMapping(path = "login")
-    public void login(@RequestBody User user){
-        log.info("Login");
-        this.userService.login(user);
+    @PostMapping(path = "register")
+    public void register(@RequestBody User user){
+        log.info("Register");
+        this.userService.register(user);
     }
 
     @PostMapping(path = "activationCode")
