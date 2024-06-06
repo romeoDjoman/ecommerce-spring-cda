@@ -1,11 +1,15 @@
 package com.romeoDjoman.inscicecom.controller;
 
 
+import com.romeoDjoman.inscicecom.dto.AuthenticationDTO;
 import com.romeoDjoman.inscicecom.entity.User;
 import com.romeoDjoman.inscicecom.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,7 @@ import java.util.Map;
 @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
+    private AuthenticationManager authenticationManager;
     private UserService userService;
 
     @PostMapping(path = "register")
@@ -30,6 +35,15 @@ public class UserController {
     @PostMapping(path = "activationCode")
     public void activationCode(@RequestBody Map<String, String> activationCode){
         this.userService.activationCode(activationCode);
+    }
+
+    @PostMapping(path = "login")
+    public Map<String,String> login(@RequestBody AuthenticationDTO authenticationDTO){
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authenticationDTO.username(), authenticationDTO.password())
+        );
+        log.info("resultat {}", authentication.isAuthenticated());
+        return null;
     }
 
 }

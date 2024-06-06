@@ -6,6 +6,10 @@ import com.romeoDjoman.inscicecom.entity.UserRole;
 import com.romeoDjoman.inscicecom.entity.ValidationCode;
 import com.romeoDjoman.inscicecom.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +17,9 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 
-
 @AllArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
@@ -53,5 +56,11 @@ public class UserService {
         User userActivate = this.userRepository.findById(validationCode.getUser().getUserId()).orElseThrow(() -> new RuntimeException("utilisateur inconnu"));
         userActivate.setActif(true);
         this.userRepository.save(userActivate);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository
+                .findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Aucun utilisateur ne correspond à cet identifiant"));
     }
 }
