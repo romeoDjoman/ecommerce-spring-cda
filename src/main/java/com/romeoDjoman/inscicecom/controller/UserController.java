@@ -3,6 +3,7 @@ package com.romeoDjoman.inscicecom.controller;
 
 import com.romeoDjoman.inscicecom.dto.AuthenticationDTO;
 import com.romeoDjoman.inscicecom.entity.User;
+import com.romeoDjoman.inscicecom.security.JwtService;
 import com.romeoDjoman.inscicecom.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class UserController {
 
     private AuthenticationManager authenticationManager;
     private UserService userService;
+    private JwtService jwtService;
 
     @PostMapping(path = "register")
     public void register(@RequestBody User user){
@@ -42,7 +44,10 @@ public class UserController {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationDTO.username(), authenticationDTO.password())
         );
-        log.info("resultat {}", authentication.isAuthenticated());
+
+        if(authentication.isAuthenticated()){
+            return this.jwtService.generate(authenticationDTO.username());
+        }
         return null;
     }
 
