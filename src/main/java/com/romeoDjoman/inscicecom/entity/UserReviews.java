@@ -21,4 +21,7 @@ public class UserReviews {
     private String comment;
     private String status;
 
+    @ManyToOne
+    private User user;
+
 }
