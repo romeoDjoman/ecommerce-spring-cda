@@ -48,6 +48,7 @@ public class ConfigurationSecurityApplication {
                                                 .requestMatchers(POST, "/register").permitAll()
                                                 .requestMatchers(POST, "/activationCode").permitAll()
                                                 .requestMatchers(POST, "/userReviews").permitAll()
+                                                .requestMatchers(POST, "/publications").permitAll()
                                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->

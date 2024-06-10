@@ -23,12 +23,14 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
+    private String firstName;
+    private String lastName;
+    private String email;
     @Column(name = "password")
     private String password;
-    private String firstName;
-//    private String lastName;
-    private String email;
+    private String phoneNumber;
     private boolean actif = false;
+
 
     @OneToOne(cascade = CascadeType.ALL)
     private UserRole userRole;

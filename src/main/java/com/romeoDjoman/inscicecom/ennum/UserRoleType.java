@@ -4,6 +4,6 @@ public enum UserRoleType {
 
     CUSTOMER,
     CONTRIBUTOR,
-    RESEARCHER,
+    PUBLISHER,
     ADMINISTRATOR
 }
