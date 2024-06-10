@@ -1,13 +1,11 @@
 package com.romeoDjoman.inscicecom.service;
 
 import com.romeoDjoman.inscicecom.dto.PublicationDto;
-import com.romeoDjoman.inscicecom.dto.VideoDto;
-import com.romeoDjoman.inscicecom.dto.DocumentDto;
+import com.romeoDjoman.inscicecom.ennum.PublicationType;
 import com.romeoDjoman.inscicecom.entity.Category;
 import com.romeoDjoman.inscicecom.entity.Publication;
 import com.romeoDjoman.inscicecom.entity.Video;
 import com.romeoDjoman.inscicecom.entity.Document;
-import com.romeoDjoman.inscicecom.ennum.PublicationType;
 import com.romeoDjoman.inscicecom.repository.CategoryRepository;
 import com.romeoDjoman.inscicecom.repository.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,7 @@ public class PublicationService {
         publication.setTitle(publicationDto.getTitle());
         publication.setAbstractText(publicationDto.getAbstractText());
         publication.setPublisher(publicationDto.getPublisher());
-        publication.setKeywords(publicationDto.getKeywords());
+        publication.setKeywords(publicationDto.getKeywords()); // Set the keywords
         publication.setLanguage(publicationDto.getLanguage());
         publication.setPublicationDate(publicationDto.getPublicationDate());
         publication.setCover(publicationDto.getCover());
@@ -68,6 +66,7 @@ public class PublicationService {
         video.setVideoFormat(publicationDto.getVideoFormat());
         video.setResolution(publicationDto.getResolution());
         video.setCreationDate(publicationDto.getCreationDate());
+        video.setPublicationType(PublicationType.VIDEO); // Ensure the type is set
         return video;
     }
 
@@ -75,6 +74,7 @@ public class PublicationService {
         Document document = new Document();
         document.setPageCount(publicationDto.getPageCount());
         document.setCreationDate(publicationDto.getCreationDate());
+        document.setPublicationType(PublicationType.DOCUMENT); // Ensure the type is set
         return document;
     }
 }

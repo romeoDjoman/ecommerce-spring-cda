@@ -1,6 +1,6 @@
 package com.romeoDjoman.inscicecom.dto;
 
-import com.romeoDjoman.inscicecom.ennum.CategoryType;
+import com.romeoDjoman.inscicecom.ennum.KeywordType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ public class PublicationDto {
     private String title;
     private String abstractText;
     private String publisher;
-    private List<String> keywords;
+    private Set<KeywordType> keywords; // Utilise les énumérations pour les mots-clés
     private String language;
     private Date publicationDate;
     private String cover;

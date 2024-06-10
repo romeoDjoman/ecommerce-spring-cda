@@ -2,6 +2,7 @@ package com.romeoDjoman.inscicecom.entity;
 
 import com.romeoDjoman.inscicecom.ennum.CategoryType;
 import com.romeoDjoman.inscicecom.ennum.PublicationType;
+import com.romeoDjoman.inscicecom.ennum.KeywordType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +22,13 @@ public abstract class Publication {
     private String title;
     private String abstractText;
     private String publisher;
-    @ElementCollection
-    private List<String> keywords;
+
+    @ElementCollection(targetClass = KeywordType.class)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "publication_keywords", joinColumns = @JoinColumn(name = "publication_id"))
+    @Column(name = "keyword")
+    private Set<KeywordType> keywords = new HashSet<>();
+
     private String language;
     private Date publicationDate;
     private String cover;
