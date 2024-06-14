@@ -1,6 +1,8 @@
 package com.romeoDjoman.inscicecom.security;
 
+import com.romeoDjoman.inscicecom.entity.Jwt;
 import com.romeoDjoman.inscicecom.entity.User;
+import com.romeoDjoman.inscicecom.repository.JwtRepository;
 import com.romeoDjoman.inscicecom.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -19,12 +21,24 @@ import java.util.function.Function;
 @AllArgsConstructor
 @Service
 public class JwtService {
+    public static final String BEARER = "bearer";
     private final String ENCRYPTION_KEY = "59d41e9e806ee793b3a859e4c23d9ab2b5d6c6cbcd292cfc621c89aff4eac560";
     private UserService userService;
+    private JwtRepository jwtRepository;
 
     public Map<String, String> generate(String username) {
         User user = this.userService.loadUserByUsername(username);
-        return this.generateJwt(user);
+        final Map<String, String> jwtMap = this.generateJwt(user);
+
+        final Jwt jwt = Jwt
+                .builder()
+                .value(jwtMap.get(BEARER))
+                .desactive(false)
+                .expire(false)
+                .user(user)
+                .build();
+        this.jwtRepository.save(jwt);
+        return jwtMap;
     }
 
     public String extractUsername(String token) {
@@ -71,7 +85,7 @@ public class JwtService {
                 .addClaims(claims)
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
-        return Map.of("token", bearer);
+        return Map.of(BEARER, bearer);
     }
 
     private Key getKey() {

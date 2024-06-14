@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
@@ -41,15 +42,9 @@ public class ConfigurationSecurityApplication {
         return
                 httpSecurity
                         .csrf(AbstractHttpConfigurer::disable)
-                        .authorizeHttpRequests(
-                                authorize ->
-                                        authorize
-                                                .requestMatchers(POST, "/login").permitAll()
-                                                .requestMatchers(POST, "/register").permitAll()
-                                                .requestMatchers(POST, "/activationCode").permitAll()
-                                                .requestMatchers(POST, "/userReviews").permitAll()
-                                                .requestMatchers(POST, "/publications").permitAll()
-                                                .anyRequest().authenticated()
+                        .authorizeHttpRequests(authorize ->
+                                authorize
+                                        .anyRequest().permitAll()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
