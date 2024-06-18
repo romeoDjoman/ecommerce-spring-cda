@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+
 @Service
 public class PublicationService {
 
@@ -64,6 +65,7 @@ public class PublicationService {
     private Video mapToVideo(PublicationDto publicationDto) {
         Video video = new Video();
         video.setVideoLength(publicationDto.getVideoLength());
+        video.setVideoFormat(publicationDto.getVideoFormat());
         video.setVideoFormat(publicationDto.getVideoFormat());
         video.setResolution(publicationDto.getResolution());
         video.setCreationDate(publicationDto.getCreationDate());

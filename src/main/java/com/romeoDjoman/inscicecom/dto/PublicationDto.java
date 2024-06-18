@@ -21,7 +21,7 @@ public class PublicationDto {
     private Set<String> categories; // Utilise les noms des catégories
     private int videoLength; // Spécifique à Video
     private String videoFormat; // Spécifique à Video
-    private List<String> resolution; // Spécifique à Video
+    private String resolution; // Spécifique à Video
     private Date creationDate; // Champ commun
     private int pageCount; // Spécifique à Document
 }
