@@ -1,6 +1,7 @@
 package com.romeoDjoman.inscicecom.service;
 
 import com.romeoDjoman.inscicecom.dto.PublicationDto;
+import com.romeoDjoman.inscicecom.ennum.KeywordType;
 import com.romeoDjoman.inscicecom.ennum.PublicationType;
 import com.romeoDjoman.inscicecom.entity.Category;
 import com.romeoDjoman.inscicecom.entity.Publication;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -88,6 +90,16 @@ public class PublicationService {
     public Optional<Publication> findPublicationById(int publicationId) {
         logger.info("Searching for publication with ID: " + publicationId);
         return publicationRepository.findByPublicationId(publicationId);
+    }
+
+    public List<Publication> findByKeywords(String keyword) {
+        KeywordType keywordType;
+        try {
+            keywordType = KeywordType.valueOf(keyword.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid keyword: " + keyword);
+        }
+        return publicationRepository.findByKeywordsContaining(keywordType);
     }
 
 }

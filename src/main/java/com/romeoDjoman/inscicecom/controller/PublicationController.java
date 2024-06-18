@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(path = "/publications")
@@ -28,6 +30,11 @@ public class PublicationController {
         return publicationService.findPublicationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Publication>> searchPublications(@RequestParam String keyword) {
+        return ResponseEntity.ok(publicationService.findByKeywords(keyword));
     }
 
 }
