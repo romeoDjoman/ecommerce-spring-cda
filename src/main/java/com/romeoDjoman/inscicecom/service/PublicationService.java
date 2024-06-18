@@ -10,14 +10,17 @@ import com.romeoDjoman.inscicecom.repository.CategoryRepository;
 import com.romeoDjoman.inscicecom.repository.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-
 @Service
 public class PublicationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(PublicationService.class);
 
     private final PublicationRepository publicationRepository;
     private final CategoryRepository categoryRepository;
@@ -82,7 +85,9 @@ public class PublicationService {
     }
 
 
-    public Optional<Publication> getPublicationById(int publicationById) {
-        return publicationRepository.findById(publicationById);
+    public Optional<Publication> findPublicationById(int publicationId) {
+        logger.info("Searching for publication with ID: " + publicationId);
+        return publicationRepository.findByPublicationId(publicationId);
     }
+
 }
