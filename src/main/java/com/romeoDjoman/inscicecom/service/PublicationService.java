@@ -2,6 +2,7 @@ package com.romeoDjoman.inscicecom.service;
 
 import com.romeoDjoman.inscicecom.dto.PublicationDto;
 import com.romeoDjoman.inscicecom.ennum.KeywordType;
+import com.romeoDjoman.inscicecom.ennum.LanguageType;
 import com.romeoDjoman.inscicecom.ennum.PublicationType;
 import com.romeoDjoman.inscicecom.entity.Category;
 import com.romeoDjoman.inscicecom.entity.Publication;
@@ -100,6 +101,10 @@ public class PublicationService {
             throw new IllegalArgumentException("Invalid keyword: " + keyword);
         }
         return publicationRepository.findByKeywordsContaining(keywordType);
+    }
+
+    public List<Publication> findByCategoryAndLanguage(String category, String language) {
+        return publicationRepository.findByCategoriesNameAndLanguage(category, language);
     }
 
 }

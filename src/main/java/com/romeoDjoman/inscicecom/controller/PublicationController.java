@@ -1,6 +1,8 @@
 package com.romeoDjoman.inscicecom.controller;
 
 import com.romeoDjoman.inscicecom.dto.PublicationDto;
+import com.romeoDjoman.inscicecom.ennum.LanguageType;
+import com.romeoDjoman.inscicecom.entity.Category;
 import com.romeoDjoman.inscicecom.entity.Publication;
 import com.romeoDjoman.inscicecom.service.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,11 @@ public class PublicationController {
     @GetMapping("/search")
     public ResponseEntity<List<Publication>> searchPublications(@RequestParam String keyword) {
         return ResponseEntity.ok(publicationService.findByKeywords(keyword));
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Publication>> filterPublications(@RequestParam String category, @RequestParam String language) {
+        return ResponseEntity.ok(publicationService.findByCategoryAndLanguage(category, language));
     }
 
 }

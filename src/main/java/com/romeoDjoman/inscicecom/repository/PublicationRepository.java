@@ -1,6 +1,8 @@
 package com.romeoDjoman.inscicecom.repository;
 
 import com.romeoDjoman.inscicecom.ennum.KeywordType;
+import com.romeoDjoman.inscicecom.ennum.LanguageType;
+import com.romeoDjoman.inscicecom.entity.Category;
 import com.romeoDjoman.inscicecom.entity.Publication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,7 +15,7 @@ public interface PublicationRepository extends JpaRepository<Publication, Intege
 
     Optional<Publication> findByPublicationId(int publicationId);
 
-    List<Publication> findByKeywordsContaining(KeywordType keyword);;
+    List<Publication> findByKeywordsContaining(KeywordType keyword);
 
-
+    List<Publication> findByCategoriesNameAndLanguage(String category, String language);
 }
