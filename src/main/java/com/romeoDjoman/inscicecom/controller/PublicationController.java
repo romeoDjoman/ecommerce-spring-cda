@@ -44,5 +44,10 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.findByCategoryAndLanguage(category, language));
     }
 
+    @GetMapping("/latest")
+    public ResponseEntity<List<Publication>> getLatestPublications() {
+        return ResponseEntity.ok(publicationService.findLatestPublications());
+    }
+
 }
 

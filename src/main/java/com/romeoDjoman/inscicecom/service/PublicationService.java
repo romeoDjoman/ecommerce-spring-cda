@@ -107,4 +107,9 @@ public class PublicationService {
         return publicationRepository.findByCategoriesNameAndLanguage(category, language);
     }
 
+    public List<Publication> findLatestPublications() {
+        return publicationRepository.findTop10ByOrderByPublicationDateDesc();
+    }
+
+
 }
