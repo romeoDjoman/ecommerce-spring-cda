@@ -19,7 +19,7 @@ public class Jwt {
     private boolean desactive;
     private boolean expire;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id")
     private User user;
 

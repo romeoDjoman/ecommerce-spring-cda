@@ -22,7 +22,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     public static final String BEARER = "bearer";
-    private final String ENCRYPTION_KEY = "59d41e9e806ee793b3a859e4c23d9ab2b5d6c6cbcd292cfc621c89aff4eac560";
+    private final String ENCRYPTION_KEY = "04435415139594fbee96438ade0dc131b90ab0ecf758ddb6caeb82f0b04f82c5";
     private UserService userService;
     private JwtRepository jwtRepository;
 

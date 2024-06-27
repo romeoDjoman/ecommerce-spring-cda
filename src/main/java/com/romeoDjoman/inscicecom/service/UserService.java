@@ -4,7 +4,7 @@ import com.romeoDjoman.inscicecom.ennum.UserRoleType;
 import com.romeoDjoman.inscicecom.entity.User;
 import com.romeoDjoman.inscicecom.entity.UserRole;
 import com.romeoDjoman.inscicecom.entity.ValidationCode;
-import com.romeoDjoman.inscicecom.repository.UserRepository;
+import com.romeoDjoman.inscicecom.repository.IUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private IUserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
     private ValidationCodeService validationCodeService;
     public void register(User user) {
