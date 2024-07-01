@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Builder
+@Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class Jwt {
     private boolean desactive;
     private boolean expire;
 
-    @ManyToOne
+    @ManyToOne (cascade = {CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "user_id")
     private User user;
 

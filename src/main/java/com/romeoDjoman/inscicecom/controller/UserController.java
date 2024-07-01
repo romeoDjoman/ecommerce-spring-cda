@@ -3,7 +3,7 @@ package com.romeoDjoman.inscicecom.controller;
 
 import com.romeoDjoman.inscicecom.dto.AuthenticationDTO;
 import com.romeoDjoman.inscicecom.entity.User;
-import com.romeoDjoman.inscicecom.security.JwtService;
+import com.romeoDjoman.inscicecom.service.JwtService;
 import com.romeoDjoman.inscicecom.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
