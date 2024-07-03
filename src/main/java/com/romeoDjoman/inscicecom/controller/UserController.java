@@ -1,9 +1,8 @@
 package com.romeoDjoman.inscicecom.controller;
 
-
 import com.romeoDjoman.inscicecom.dto.AuthenticationDTO;
 import com.romeoDjoman.inscicecom.entity.User;
-import com.romeoDjoman.inscicecom.service.JwtService;
+import com.romeoDjoman.inscicecom.security.JwtService;
 import com.romeoDjoman.inscicecom.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +38,11 @@ public class UserController {
         this.userService.activationCode(activationCode);
     }
 
+    @PostMapping(path = "deconnexion")
+    public void logout(){
+        this.jwtService.logout();
+    }
+
     @PostMapping(path = "login")
     public Map<String,String> login(@RequestBody AuthenticationDTO authenticationDTO){
         final Authentication authentication = authenticationManager.authenticate(
@@ -50,5 +54,6 @@ public class UserController {
         }
         return null;
     }
+
 
 }

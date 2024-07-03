@@ -19,11 +19,11 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    private UserRepository userRepository;
-    private BCryptPasswordEncoder passwordEncoder;
-    private ValidationCodeService validationCodeService;
-    public void register(User user) {
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final ValidationCodeService validationCodeService;
 
+    public void register(User user) {
         if (!user.getEmail().contains("@")) {
             throw new RuntimeException("Votre adresse email doit contenir un '@'.");
         }
@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
         }
 
         Optional<User> userOptional = this.userRepository.findByEmail(user.getEmail());
-        if(userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
             throw new RuntimeException("Votre adresse mail est déjà utilisée");
         }
         String passwordCrypted = this.passwordEncoder.encode(user.getPassword());
@@ -42,14 +42,14 @@ public class UserService implements UserDetailsService {
         userRole.setRoleName(UserRoleType.CUSTOMER);
         user.setUserRole(userRole);
 
-        user =  this.userRepository.save(user);
+        user = this.userRepository.save(user);
         this.validationCodeService.saveValidationCode(user);
     }
 
     public void activationCode(Map<String, String> activationCode) {
         ValidationCode validationCode = this.validationCodeService.readAccordingCode(activationCode.get("code"));
         if (Instant.now().isAfter(validationCode.getExpirationDate())) {
-            throw new RuntimeException(("Votre code a expiré"));
+            throw new RuntimeException("Votre code a expiré");
         }
         User userActivate = this.userRepository.findById(validationCode.getUser().getUserId()).orElseThrow(() -> new RuntimeException("utilisateur inconnu"));
         userActivate.setActif(true);
@@ -59,6 +59,7 @@ public class UserService implements UserDetailsService {
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepository
-                .findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Aucun utilisateur ne correspond à cet identifiant"));
+                .findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Aucun utilisateur ne correspond à cet identifiant"));
     }
 }

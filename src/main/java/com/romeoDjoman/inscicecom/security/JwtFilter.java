@@ -1,7 +1,6 @@
 package com.romeoDjoman.inscicecom.security;
 
 import com.romeoDjoman.inscicecom.entity.Jwt;
-import com.romeoDjoman.inscicecom.service.JwtService;
 import com.romeoDjoman.inscicecom.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

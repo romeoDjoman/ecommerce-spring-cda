@@ -1,23 +1,29 @@
-package com.romeoDjoman.inscicecom.service;
+package com.romeoDjoman.inscicecom.security;
 
 import com.romeoDjoman.inscicecom.entity.Jwt;
 import com.romeoDjoman.inscicecom.entity.User;
 import com.romeoDjoman.inscicecom.repository.JwtRepository;
+import com.romeoDjoman.inscicecom.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+@Transactional
 @AllArgsConstructor
 @Service
 public class JwtService {
@@ -29,13 +35,16 @@ public class JwtService {
     private static final ZoneId PARIS_ZONE_ID = ZoneId.of("Europe/Paris");
 
     public Jwt tokenByValue(String value) {
-        return this.jwtRepository.findByValue(value)
-                .orElseThrow(() -> new RuntimeException("Token inconnu"));
+        return this.jwtRepository.findByValueAndDesactiveAndExpire(
+                        value,
+                        false, false)
+                .orElseThrow(() -> new RuntimeException("Token invalide ou inconnu"));
     }
 
     public Map<String, String> generate(String username) {
         User user = this.userService.loadUserByUsername(username);
-        final Map<String, String> jwtMap = this.generateJwt(user);
+        this.disableTokens(user);
+        final Map<String, String> jwtMap = new java.util.HashMap<>(this.generateJwt(user));
 
         final Jwt jwt = Jwt
                 .builder()
@@ -46,6 +55,17 @@ public class JwtService {
                 .build();
         this.jwtRepository.save(jwt);
         return jwtMap;
+    }
+
+    private void disableTokens(User user) {
+        final List<Jwt> jwtList = this.jwtRepository.findUser(user.getEmail()).peek(
+                jwt -> {
+                    jwt.setDesactive(true);
+                    jwt.setExpire(true);
+                }
+        ).collect(Collectors.toList());
+
+        this.jwtRepository.saveAll(jwtList);
     }
 
     public String extractUsername(String token) {
@@ -75,21 +95,20 @@ public class JwtService {
     }
 
     private Map<String, String> generateJwt(User user) {
-        final ZonedDateTime now = ZonedDateTime.now(PARIS_ZONE_ID);
-        final ZonedDateTime expirationTime = now.plusMinutes(30); // 30 minutes
+        final long currentTime = System.currentTimeMillis();
+        final long expirationTime = currentTime + 60 * 1000;
 
         final Map<String, Object> claims = Map.of(
-                "Nom", user.getFirstName(),
-                "Email", user.getEmail(),
-                Claims.EXPIRATION, Date.from(expirationTime.toInstant()),
+                "nom", user.getFirstName(),
+                Claims.EXPIRATION, new Date(expirationTime),
                 Claims.SUBJECT, user.getEmail()
         );
 
         final String bearer = Jwts.builder()
-                .setIssuedAt(Date.from(now.toInstant()))
-                .setExpiration(Date.from(expirationTime.toInstant()))
+                .setIssuedAt(new Date(currentTime))
+                .setExpiration(new Date(expirationTime))
                 .setSubject(user.getEmail())
-                .addClaims(claims)
+                .setClaims(claims)
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
         return Map.of(BEARER, bearer);
@@ -98,5 +117,22 @@ public class JwtService {
     private Key getKey() {
         final byte[] decoder = Decoders.BASE64.decode(ENCRYPTION_KEY);
         return Keys.hmacShaKeyFor(decoder);
+    }
+
+    public void logout() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            User user = (User) principal;
+            Jwt jwt = this.jwtRepository.findUserValidToken(
+                    user.getEmail(),
+                    false,
+                    false
+            ).orElseThrow(() -> new RuntimeException("Token invalide"));
+            jwt.setExpire(true);
+            jwt.setDesactive(true);
+            this.jwtRepository.save(jwt);
+        } else {
+            throw new RuntimeException("Principal is not an instance of User");
+        }
     }
 }
