@@ -33,12 +33,22 @@ public class UserController {
         this.userService.register(user);
     }
 
+    @PostMapping(path = "modify-password")
+    public void modifyPassword(@RequestBody Map<String, String> activationCode) {
+        this.userService.modifyPassword(activationCode);
+    }
+
+    @PostMapping(path = "new-password")
+    public void newPassword(@RequestBody Map<String, String> activationCode) {
+        this.userService.newPassword(activationCode);
+    }
+
     @PostMapping(path = "activationCode")
     public void activationCode(@RequestBody Map<String, String> activationCode){
         this.userService.activationCode(activationCode);
     }
 
-    @PostMapping(path = "deconnexion")
+    @PostMapping(path = "log-out")
     public void logout(){
         this.jwtService.logout();
     }

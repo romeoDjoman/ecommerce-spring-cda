@@ -11,10 +11,13 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -23,6 +26,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Transactional
 @AllArgsConstructor
 @Service
@@ -134,5 +138,13 @@ public class JwtService {
         } else {
             throw new RuntimeException("Principal is not an instance of User");
         }
+    }
+
+
+    // @Scheduled(cron = "@daily")
+    @Scheduled(cron = "0 */1 * * * *")
+    public void removeUselessJwt() {
+        log.info("Suppression des tokens à {}", Instant.now());
+        this.jwtRepository.deleteAllByExpireAndDesactive(true, true);
     }
 }

@@ -62,4 +62,20 @@ public class UserService implements UserDetailsService {
                 .findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Aucun utilisateur ne correspond à cet identifiant"));
     }
+
+    public void modifyPassword(Map<String, String> parameters) {
+        User user = this.loadUserByUsername(parameters.get("email"));
+        this.validationCodeService.saveValidationCode(user);
+    }
+
+    public void newPassword(Map<String, String> parameters) {
+        User user = this.loadUserByUsername(parameters.get("email"));
+        final ValidationCode validationCode = validationCodeService.readAccordingCode(parameters.get("code"));
+        if(validationCode.getUser().getEmail().equals(user.getEmail())) {
+            String passwordCrypted = this.passwordEncoder.encode(parameters.get("password"));
+            user.setPassword(passwordCrypted);
+            this.userRepository.save(user);
+        }
+
+    }
 }

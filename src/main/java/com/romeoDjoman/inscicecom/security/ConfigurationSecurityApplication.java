@@ -44,6 +44,11 @@ public class ConfigurationSecurityApplication {
                         .csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(authorize ->
                                 authorize
+                                        .requestMatchers(POST, "/api/register").permitAll()
+                                        .requestMatchers(GET, "/api/login").permitAll()
+                                        .requestMatchers(POST, "/api/activationCode").permitAll()
+                                        .requestMatchers(POST, "/api/modify-password").permitAll()
+                                        .requestMatchers(POST, "/api/new-password").permitAll()
                                         .anyRequest().permitAll()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->

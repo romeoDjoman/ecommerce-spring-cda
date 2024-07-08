@@ -28,9 +28,12 @@ public class ValidationCodeService {
         validationCode.setExpirationDate(expirationDate);
 
         // Create the coDde
-        Random random = new Random();
-        int randomInteger = random.nextInt(999999);
-        String code = String.format("%06d", randomInteger);
+        String code;
+        do {
+            Random random = new Random();
+            int randomInteger = random.nextInt(999999);
+            code = String.format("%06d", randomInteger);
+        } while (validationCodeRepository.findByCode(code).isPresent());
 
         validationCode.setCode(code);
         this.validationCodeRepository.save(validationCode);
