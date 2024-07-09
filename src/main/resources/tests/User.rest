@@ -1,0 +1,8 @@
+###
+POST http://localhost:9191/api/login
+Content-Type: application/json
+
+{
+  "username": "michelromy.brou@gmail.com",
+  "password": "pwd"
+}

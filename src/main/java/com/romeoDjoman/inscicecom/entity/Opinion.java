@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name ="user_reviews")
-public class UserReviews {
+@Table(name ="opinions")
+public class Opinion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

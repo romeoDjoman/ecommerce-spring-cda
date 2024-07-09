@@ -76,6 +76,7 @@ public class UserService implements UserDetailsService {
             user.setPassword(passwordCrypted);
             this.userRepository.save(user);
         }
-
     }
+
+
 }

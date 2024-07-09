@@ -2,11 +2,9 @@ package com.romeoDjoman.inscicecom.entity;
 
 import com.romeoDjoman.inscicecom.ennum.UserRoleType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor

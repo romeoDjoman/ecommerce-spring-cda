@@ -1,9 +1,6 @@
 package com.romeoDjoman.inscicecom.security;
 
 import com.romeoDjoman.inscicecom.service.UserService;
-import jakarta.servlet.Filter;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,6 +46,8 @@ public class ConfigurationSecurityApplication {
                                         .requestMatchers(POST, "/api/activationCode").permitAll()
                                         .requestMatchers(POST, "/api/modify-password").permitAll()
                                         .requestMatchers(POST, "/api/new-password").permitAll()
+
+                                        .requestMatchers(GET, "/api/opinion").hasRole("ADMINISTRATOR")
                                         .anyRequest().permitAll()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->

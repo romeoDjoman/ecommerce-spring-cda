@@ -1,0 +1,14 @@
+###
+POST http://localhost:9191/api/opinion
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJub20iOiJKZWFuIFlhbm4gQUhVQSIsInN1YiI6ImplYW55YW5ubkBnbWFpbC5jb20iLCJleHAiOjE3MjA1MjE4Mzh9.o6D-4IMDST1UeVJoNwwqKy4WOIxoLBVuo-eiF5hMbi8
+
+{
+  "message" : "Belle formation spring security bis"
+}
+
+###
+GET http://localhost:9191/api/opinion
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJub20iOiJKZWFuIFlhbm4gQUhVQSIsInN1YiI6ImplYW55YW5ubkBnbWFpbC5jb20iLCJleHAiOjE3MjA1MjE4Mzh9.o6D-4IMDST1UeVJoNwwqKy4WOIxoLBVuo-eiF5hMbi8
+

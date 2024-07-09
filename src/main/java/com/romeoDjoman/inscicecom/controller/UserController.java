@@ -34,14 +34,15 @@ public class UserController {
     }
 
     @PostMapping(path = "modify-password")
-    public void modifyPassword(@RequestBody Map<String, String> activationCode) {
-        this.userService.modifyPassword(activationCode);
+    public void modifyPassword(@RequestBody Map<String, String> parameters) {
+        this.userService.modifyPassword(parameters);
     }
 
     @PostMapping(path = "new-password")
-    public void newPassword(@RequestBody Map<String, String> activationCode) {
-        this.userService.newPassword(activationCode);
+    public void newPassword(@RequestBody Map<String, String> parameters) {
+        this.userService.newPassword(parameters);
     }
+
 
     @PostMapping(path = "activationCode")
     public void activationCode(@RequestBody Map<String, String> activationCode){
