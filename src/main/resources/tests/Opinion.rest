@@ -1,14 +1,29 @@
 ###
 POST http://localhost:9191/api/opinion
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJub20iOiJKZWFuIFlhbm4gQUhVQSIsInN1YiI6ImplYW55YW5ubkBnbWFpbC5jb20iLCJleHAiOjE3MjA1MjE4Mzh9.o6D-4IMDST1UeVJoNwwqKy4WOIxoLBVuo-eiF5hMbi8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXJlbGFkaWdAZ21haWwuY29tIiwibm9tIjoiRHVyZWwiLCJleHAiOjE3MjA1NDI5MTF9.MBgc_PKxyk2LZxVVLKNH2iyddTWdOeq3Zdm2XD19azk
 
 {
-  "message" : "Belle formation spring security bis"
+  "comment" : "Ceci est une opinion avec accès ADMIN et PUBLISHER"
 }
 
 ###
+// Obtenir liste des Opinions VISITOR
 GET http://localhost:9191/api/opinion
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJub20iOiJKZWFuIFlhbm4gQUhVQSIsInN1YiI6ImplYW55YW5ubkBnbWFpbC5jb20iLCJleHAiOjE3MjA1MjE4Mzh9.o6D-4IMDST1UeVJoNwwqKy4WOIxoLBVuo-eiF5hMbi8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkdXJlbGFkaWdAZ21haWwuY29tIiwibm9tIjoiRHVyZWwiLCJleHAiOjE3MjA1NDQyNDd9.6jTmQuRLqi2lm0C88U-wGZSlwuj8xea_s0f1W0HKYbA
+
+
+###
+// Obtenir liste des Opinions ADMIN
+GET http://localhost:9191/api/opinion
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJub20iOiJVc2VyIEFkbWluIiwiZXhwIjoxNzIwNTQzODA5fQ.CWbDwpJvgylEVEEJZTvieBgG-P3NQXHy8MTEOKgmbe4
+
+
+###
+// Obtenir liste des Opinions PUBLISHER
+GET http://localhost:9191/api/opinion
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwdWJsaXNoZXJAZ21haWwuY29tIiwibm9tIjoiVXNlciBQdWJsaXNoZXIiLCJleHAiOjE3MjA1NDM5NDd9.dfT3iiG0S7Da7cvnNHVHN4nm1SOQx1NteCLI8AS7dK8
 

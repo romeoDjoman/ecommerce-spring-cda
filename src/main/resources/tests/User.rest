@@ -1,8 +1,66 @@
 ###
+// Registration
+POST http://localhost:9191/api/register
+Content-Type: application/json
+
+{
+  "firstName": "Durel",
+  "lastName" : "ADIG",
+  "email": "dureladig@gmail.com",
+  "password": "pwd"
+}
+
+
+###
+// Activation
+POST http://localhost:9191/api/activationCode
+Content-Type: application/json
+
+{
+  "code": "653519"
+}
+
+###
+// login
 POST http://localhost:9191/api/login
 Content-Type: application/json
 
 {
-  "username": "michelromy.brou@gmail.com",
+  "username": "dureladig@gmail.com",
   "password": "pwd"
 }
+
+###
+// login admin
+POST http://localhost:9191/api/login
+Content-Type: application/json
+
+{
+  "username": "admin@gmail.com",
+  "password": "admin"
+}
+
+###
+// login publisher
+POST http://localhost:9191/api/login
+Content-Type: application/json
+
+{
+  "username": "publisher@gmail.com",
+  "password": "admin"
+}
+
+
+###
+// Obtenir des ADMIN connectés
+GET http://localhost:9191/api/user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MjA1NDg1MTUsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsIm5vbSI6IlVzZXIgQWRtaW4ifQ.96M9svlccmiDbrWXI9uI1Sww0udka_KN_RQuuLwcFoc
+
+
+###
+// Obtenir liste des Opinions PUBLISHER
+GET http://localhost:9191/api/user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwdWJsaXNoZXJAZ21haWwuY29tIiwibm9tIjoiVXNlciBQdWJsaXNoZXIiLCJleHAiOjE3MjA1NDM5NDd9.dfT3iiG0S7Da7cvnNHVHN4nm1SOQx1NteCLI8AS7dK8
+

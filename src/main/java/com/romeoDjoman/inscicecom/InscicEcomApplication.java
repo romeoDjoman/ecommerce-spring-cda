@@ -5,7 +5,6 @@ import com.romeoDjoman.inscicecom.entity.User;
 import com.romeoDjoman.inscicecom.entity.UserRole;
 import com.romeoDjoman.inscicecom.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -28,16 +27,16 @@ public class InscicEcomApplication {
 				.actif(true)
 				.firstName("admin")
 				.password(passwordEncoder.encode("admin"))
-				.email("michelromy.brou@gmail.com")
+				.email("admin@gmail.com")
 				.userRole(
 						UserRole.builder()
 								.roleName(UserRoleType.ADMINISTRATOR)
 								.build()
 				)
 				.build();
-		this.userRepository.findByEmail("michelromy.brou@gmail.com")
-				.orElse(this.userRepository.save(admin));
-
+		admin = this.userRepository.findByEmail("admin@gmail.com")
+				.orElse(admin);
+		this.userRepository.save(admin);
 
 		User publisher = User.builder()
 				.actif(true)
@@ -50,8 +49,9 @@ public class InscicEcomApplication {
 								.build()
 				)
 				.build();
-		this.userRepository.findByEmail("publisher@gmail.com")
-				.orElse(this.userRepository.save(publisher));
+		publisher = this.userRepository.findByEmail("publisher@gmail.com")
+				.orElse(publisher);
+		this.userRepository.save(publisher);
 	}
 
 }

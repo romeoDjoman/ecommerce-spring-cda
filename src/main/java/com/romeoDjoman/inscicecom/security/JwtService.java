@@ -12,12 +12,10 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -99,18 +97,19 @@ public class JwtService {
     }
 
     private Map<String, String> generateJwt(User user) {
-        final long currentTime = System.currentTimeMillis();
-        final long expirationTime = currentTime + 60 * 1000;
+        final ZonedDateTime now = ZonedDateTime.now(PARIS_ZONE_ID);
+        final long currentTime = now.toInstant().toEpochMilli();
+        final long expirationTime = currentTime + 24 * 60 * 60 * 1000; // 1 jour
 
         final Map<String, Object> claims = Map.of(
                 "nom", user.getFirstName(),
-                Claims.EXPIRATION, new Date(expirationTime),
+                Claims.EXPIRATION, Date.from(now.plusHours(1).toInstant()),
                 Claims.SUBJECT, user.getEmail()
         );
 
         final String bearer = Jwts.builder()
-                .setIssuedAt(new Date(currentTime))
-                .setExpiration(new Date(expirationTime))
+                .setIssuedAt(Date.from(now.toInstant()))
+                .setExpiration(Date.from(now.plusHours(1).toInstant()))
                 .setSubject(user.getEmail())
                 .setClaims(claims)
                 .signWith(getKey(), SignatureAlgorithm.HS256)
@@ -140,11 +139,11 @@ public class JwtService {
         }
     }
 
-
-    // @Scheduled(cron = "@daily")
-    @Scheduled(cron = "0 */1 * * * *")
-    public void removeUselessJwt() {
-        log.info("Suppression des tokens à {}", Instant.now());
-        this.jwtRepository.deleteAllByExpireAndDesactive(true, true);
-    }
+//
+//    //  @Scheduled(cron = "0 */1 * * * *") chaque minute
+//    @Scheduled(cron = "0 0 0 * * *")
+//    public void removeUselessJwt() {
+//        log.info("Suppression des tokens à {}", Instant.now());
+//        this.jwtRepository.deleteAllByExpireAndDesactive(true, true);
+//    }
 }

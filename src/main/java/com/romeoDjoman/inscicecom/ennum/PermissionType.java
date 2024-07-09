@@ -1,0 +1,15 @@
+package com.romeoDjoman.inscicecom.ennum;
+
+public enum PermissionType {
+    ADMINISTRATOR_CREATE,
+    ADMINISTRATOR_READ,
+    ADMINISTRATOR_UPDATE,
+    ADMINISTRATOR_DELETE,
+
+    PUBLISHER_CREATE,
+    PUBLISHER_READ,
+    PUBLISHER_UPDATE,
+    PUBLISHER_DELETE_OPINION,
+
+    USER_CREATE_OPINION;
+}

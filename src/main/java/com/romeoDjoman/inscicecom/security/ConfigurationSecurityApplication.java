@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,6 +21,7 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
+@EnableMethodSecurity
 @EnableWebSecurity
 public class ConfigurationSecurityApplication {
 
@@ -47,7 +49,8 @@ public class ConfigurationSecurityApplication {
                                         .requestMatchers(POST, "/api/modify-password").permitAll()
                                         .requestMatchers(POST, "/api/new-password").permitAll()
 
-                                        .requestMatchers(GET, "/api/opinion").hasRole("ADMINISTRATOR")
+                                        .requestMatchers(GET, "/api/opinion").hasAnyAuthority("ROLE_PUBLISHER","ROLE_ADMINISTRATOR")
+                                        .requestMatchers(GET, "/api/user").hasAnyAuthority("ROLE_PUBLISHER","ROLE_ADMINISTRATOR")
                                         .anyRequest().permitAll()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->
