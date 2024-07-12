@@ -4,10 +4,11 @@ POST http://localhost:9191/api/register
 Content-Type: application/json
 
 {
-  "firstName": "Durel",
-  "lastName" : "ADIG",
-  "email": "dureladig@gmail.com",
-  "password": "pwd"
+  "firstName": "User",
+  "lastName": "ADMIN",
+  "email": "admin@gmail.com",
+  "password": "admin",
+  "phoneNumber": "0656575859"
 }
 
 
@@ -19,6 +20,7 @@ Content-Type: application/json
 {
   "code": "653519"
 }
+
 
 ###
 // login
@@ -55,7 +57,7 @@ Content-Type: application/json
 // Obtenir des ADMIN connectés
 GET http://localhost:9191/api/user
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MjA1NDg1MTUsInN1YiI6ImFkbWluQGdtYWlsLmNvbSIsIm5vbSI6IlVzZXIgQWRtaW4ifQ.96M9svlccmiDbrWXI9uI1Sww0udka_KN_RQuuLwcFoc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJub20iOiJVc2VyIiwiZXhwIjoxNzIwNzk0OTk1LCJzdWIiOiJhZG1pbkBnbWFpbC5jb20ifQ.irZy7RGEXdSZL1IgGK_pjtvZwyZiBwWboFSWY42wKVM
 
 
 ###

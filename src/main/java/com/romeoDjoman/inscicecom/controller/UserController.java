@@ -18,7 +18,7 @@ public class UserController {
 
     UserService userService;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasAuthority('ADMINISTRATOR_VIEW_SUBMITTED_PUBLICATIONS')")
     @GetMapping
     public List<User> listOpinion() {
         return this.userService.listUser();
