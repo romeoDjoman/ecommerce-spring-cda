@@ -23,4 +23,7 @@ public class UserController {
     public List<User> listOpinion() {
         return this.userService.listUser();
     }
+
+
 }
+

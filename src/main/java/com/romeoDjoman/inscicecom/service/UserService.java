@@ -25,69 +25,109 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final ValidationCodeService validationCodeService;
 
-    public void register(User user) {
-        if (!user.getEmail().contains("@")) {
-            throw new RuntimeException("Votre adresse email doit contenir un '@'.");
-        }
-        if (!user.getEmail().contains(".")) {
-            throw new RuntimeException("Votre adresse email doit contenir un '.'.");
-        }
 
-        Optional<User> userOptional = this.userRepository.findByEmail(user.getEmail());
+    public void register(User user) {
+        validateEmail(user.getEmail());
+
+        Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
         if (userOptional.isPresent()) {
             throw new RuntimeException("Votre adresse mail est déjà utilisée");
         }
-        String passwordCrypted = this.passwordEncoder.encode(user.getPassword());
+
+        String passwordCrypted = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordCrypted);
 
         UserRole userRole = new UserRole();
-        userRole.setRoleName(UserRoleType.CUSTOMER);
+        userRole.setRoleName(UserRoleType.CUSTOMER); // Set default role to USER
         user.setUserRole(userRole);
+        user.setContributorApproved(false); // Initialisation explicite
+        user.setPublisherApproved(false);
 
-        user = this.userRepository.save(user);
-        this.validationCodeService.saveValidationCode(user);
+        user = userRepository.save(user);
+        validationCodeService.saveValidationCode(user);
     }
 
+    public void requestRoleUpgrade(String email, UserRoleType requestedRole) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        if (requestedRole == UserRoleType.PUBLISHER) {
+            user.setPublisherRequested(true);
+        } else if (requestedRole == UserRoleType.CONTRIBUTOR) {
+            user.setContributorRequested(true);
+        }
+
+        userRepository.save(user);
+    }
+
+    public void approveRoleUpgrade(String email, UserRoleType approvedRole) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        if (approvedRole == UserRoleType.PUBLISHER) {
+            user.setPublisherApproved(true);
+            user.setUserRole(new UserRole(0, UserRoleType.PUBLISHER));
+        } else if (approvedRole == UserRoleType.CONTRIBUTOR) {
+            user.setContributorApproved(true);
+            user.setUserRole(new UserRole(0, UserRoleType.CONTRIBUTOR));
+        }
+
+        userRepository.save(user);
+    }
+
+
+    private void validateEmail(String email) {
+        if (!email.contains("@") || !email.contains(".")) {
+            throw new IllegalArgumentException("Votre adresse email doit contenir un '@' et un '.'.");
+        }
+    }
+
+
     public void activationCode(Map<String, String> activationCode) {
-        ValidationCode validationCode = this.validationCodeService.readAccordingCode(activationCode.get("code"));
+        ValidationCode validationCode = validationCodeService.readAccordingCode(activationCode.get("code"));
         if (Instant.now().isAfter(validationCode.getExpirationDate())) {
             throw new RuntimeException("Votre code a expiré");
         }
-        User userActivate = this.userRepository.findById(validationCode.getUser().getUserId()).orElseThrow(() -> new RuntimeException("utilisateur inconnu"));
+
+        User userActivate = userRepository.findById(validationCode.getUser().getUserId())
+                .orElseThrow(() -> new RuntimeException("utilisateur inconnu"));
         userActivate.setActif(true);
-        this.userRepository.save(userActivate);
+        userRepository.save(userActivate);
     }
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository
-                .findByEmail(username)
+        return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Aucun utilisateur ne correspond à cet identifiant"));
     }
 
+
     public void modifyPassword(Map<String, String> parameters) {
-        User user = this.loadUserByUsername(parameters.get("email"));
-        this.validationCodeService.saveValidationCode(user);
+        User user = loadUserByUsername(parameters.get("email"));
+        validationCodeService.saveValidationCode(user);
     }
 
+
     public void newPassword(Map<String, String> parameters) {
-        User user = this.loadUserByUsername(parameters.get("email"));
-        final ValidationCode validationCode = validationCodeService.readAccordingCode(parameters.get("code"));
-        if(validationCode.getUser().getEmail().equals(user.getEmail())) {
-            String passwordCrypted = this.passwordEncoder.encode(parameters.get("password"));
+        User user = loadUserByUsername(parameters.get("email"));
+        ValidationCode validationCode = validationCodeService.readAccordingCode(parameters.get("code"));
+
+        if (validationCode.getUser().getEmail().equals(user.getEmail())) {
+            String passwordCrypted = passwordEncoder.encode(parameters.get("password"));
             user.setPassword(passwordCrypted);
-            this.userRepository.save(user);
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Le code de validation ne correspond pas à l'utilisateur");
         }
     }
 
 
     public List<User> listUser() {
-        final Iterable<User> userIterable = this.userRepository.findAll();
-        List users = new ArrayList();
+        final Iterable<User> userIterable = userRepository.findAll();
+        List<User> users = new ArrayList<>();
         for (User user : userIterable) {
             users.add(user);
         }
         return users;
-
     }
 }

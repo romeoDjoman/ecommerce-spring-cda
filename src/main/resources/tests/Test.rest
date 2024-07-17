@@ -1,0 +1,168 @@
+###
+# Inscription d'un utilisateur (USER par défaut)
+POST http://localhost:9191/api/register
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "user@example.com",
+  "password": "password",
+  "phoneNumber": "1234567890"
+}
+
+###
+# Inscription d'un client (CUSTOMER)
+POST http://localhost:9191/api/register
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "customer@example.com",
+  "password": "password",
+  "phoneNumber": "1234567890"
+}
+
+###
+# Inscription d'un éditeur (PUBLISHER)
+POST http://localhost:9191/api/register
+Content-Type: application/json
+
+{
+  "firstName": "Paul",
+  "lastName": "Publisher",
+  "email": "publisher@example.com",
+  "password": "password",
+  "phoneNumber": "1234567890"
+}
+
+###
+# Inscription d'un administrateur (ADMINISTRATOR)
+POST http://localhost:9191/api/register
+Content-Type: application/json
+
+{
+  "firstName": "Admin",
+  "lastName": "Manager",
+  "email": "admin@example.com",
+  "password": "adminpassword",
+  "phoneNumber": "1234567890"
+}
+
+
+###
+# Activation du compte
+POST http://localhost:9191/api/activationCode
+Content-Type: application/json
+
+{
+  "code": "530498"
+}
+
+
+###
+# Connexion utilisateur (USER)
+POST http://localhost:9191/api/login
+Content-Type: application/json
+
+{
+  "username": "user@example.com",
+  "password": "password"
+}
+
+###
+# Connexion client (CUSTOMER)
+POST http://localhost:9191/api/login
+Content-Type: application/json
+
+{
+  "username": "customer@example.com",
+  "password": "password"
+}
+
+###
+# Connexion éditeur (PUBLISHER)
+POST http://localhost:9191/api/login
+Content-Type: application/json
+
+{
+  "username": "publisher@example.com",
+  "password": "password"
+}
+
+###
+# Connexion administrateur (ADMINISTRATOR)
+POST http://localhost:9191/api/login
+Content-Type: application/json
+
+{
+  "username": "admin@example.com",
+  "password": "adminpassword"
+}
+
+
+###
+# Accès à une ressource pour USER
+GET http://localhost:9191/api/user/resource
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MjEwNTExOTcsInN1YiI6ImFkbWluQGV4YW1wbGUuY29tIiwibm9tIjoiQWRtaW4ifQ.9x8zlfgCJfXWlJXVSbLnssyz3g7niCmpKiHQ4-ziq1o
+
+###
+# Accès à une ressource pour CUSTOMER
+GET http://localhost:9191/api/customer-resource
+Content-Type: application/json
+Authorization: Bearer <your-jwt-token>
+
+
+###
+# Liste des opinions (requiert le rôle PUBLISHER)
+GET http://localhost:9191/api/opinion
+Content-Type: application/json
+Authorization: Bearer <your-jwt-token>
+
+###
+# Création d'une opinion (requiert le rôle PUBLISHER)
+POST http://localhost:9191/api/opinion
+Content-Type: application/json
+Authorization: Bearer <your-jwt-token>
+
+{
+  "comment": "Ceci est une opinion avec accès ADMIN et PUBLISHER"
+}
+
+
+###
+# Obtenir la liste des utilisateurs (requiert le rôle ADMINISTRATOR)
+GET http://localhost:9191/api/user
+Content-Type: application/json
+Authorization: Bearer <your-jwt-token>
+
+###
+# Liste des opinions (requiert le rôle ADMINISTRATOR)
+GET http://localhost:9191/api/opinion
+Content-Type: application/json
+Authorization: Bearer <your-jwt-token>
+
+
+
+###
+# Demande de mise à niveau de rôle vers PUBLISHER
+POST http://localhost:9191/api/request-role-upgrade
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "role": "PUBLISHER"
+}
+
+###
+# Approber la mise à niveau de rôle vers PUBLISHER par l'administrateur
+POST http://localhost:9191/api/approve-role-upgrade
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MjEwNTEwMzUsInN1YiI6ImFkbWluQGV4YW1wbGUuY29tIiwibm9tIjoiQWRtaW4ifQ.SXK55GqAvZUO6RJd2xsA9UK_2hzeLeXUk8n5hSuM9HQ
+
+{
+  "email": "user@example.com",
+  "role": "PUBLISHER"
+}

@@ -1,12 +1,14 @@
 package com.romeoDjoman.inscicecom.controller;
 
 import com.romeoDjoman.inscicecom.dto.AuthenticationDTO;
+import com.romeoDjoman.inscicecom.ennum.UserRoleType;
 import com.romeoDjoman.inscicecom.entity.User;
 import com.romeoDjoman.inscicecom.security.JwtService;
 import com.romeoDjoman.inscicecom.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +38,21 @@ public class AccountController {
     @PostMapping(path = "modify-password")
     public void modifyPassword(@RequestBody Map<String, String> parameters) {
         this.userService.modifyPassword(parameters);
+    }
+
+    @PostMapping(path = "request-role-upgrade")
+    public void requestRoleUpgrade(@RequestBody Map<String, String> params) {
+        String email = params.get("email");
+        UserRoleType role = UserRoleType.valueOf(params.get("role"));
+        this.userService.requestRoleUpgrade(email, role);
+    }
+
+    @PostMapping(path = "approve-role-upgrade")
+    @PreAuthorize("hasAuthority('ROLE_ADMINISTRATOR')")
+    public void approveRoleUpgrade(@RequestBody Map<String, String> params) {
+        String email = params.get("email");
+        UserRoleType role = UserRoleType.valueOf(params.get("role"));
+        userService.approveRoleUpgrade(email, role);
     }
 
     @PostMapping(path = "new-password")

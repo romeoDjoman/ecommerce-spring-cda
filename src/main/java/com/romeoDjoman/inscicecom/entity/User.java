@@ -33,6 +33,12 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     private UserRole userRole;
 
+    // Manage role and permission by Admin
+    private boolean publisherRequested = false;
+    private boolean contributorRequested = false;
+    private boolean publisherApproved = false;
+    private boolean contributorApproved = false;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.userRole.getRoleName().getAuthorities();
